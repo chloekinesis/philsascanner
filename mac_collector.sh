@@ -5,9 +5,9 @@
 # ==========================================
 
 echo ""
-echo -e "\033[1;36m==========================================\033[0m"
-echo -e "\033[1;36m SCHOOL COMPUTER SPECIFICATION COLLECTOR \033[0m"
-echo -e "\033[1;36m==========================================\033[0m"
+echo "\033[1;36m==========================================\033[0m"
+echo "\033[1;36m SCHOOL COMPUTER SPECIFICATION COLLECTOR \033[0m"
+echo "\033[1;36m==========================================\033[0m"
 echo ""
 echo "Collecting information. Please wait..."
 echo ""
@@ -78,16 +78,29 @@ DISPLAYS_INFO=$(system_profiler SPDisplaysDataType 2>/dev/null | awk -F': ' '/Re
 # -------------------------------
 # SECURITY / FIRMWARE
 # -------------------------------
-SIP_STATUS=$(csrutil status 2>/dev/null | grep -q "enabled" && echo "Enabled" || echo "Disabled")
+SIP_STATUS="Enabled"
+if csrutil status 2>/dev/null | grep -q "disabled"; then
+    SIP_STATUS="Disabled"
+fi
 
 # -------------------------------
 # PERIPHERALS & POWER
 # -------------------------------
-CAMERA=$(system_profiler SPCameraDataType 2>/dev/null | grep -q "Unique ID" && echo "Detected" || echo "Not detected")
+CAMERA="Not detected"
+if system_profiler SPCameraDataType 2>/dev/null | grep -q "Unique ID"; then
+    CAMERA="Detected"
+fi
 
 AUDIO_INFO=$(system_profiler SPAudioDataType 2>/dev/null)
-MIC=$(echo "$AUDIO_INFO" | grep -qi "microphone\|input" && echo "Detected" || echo "Not detected")
-SPEAKER=$(echo "$AUDIO_INFO" | grep -qi "speaker\|output" && echo "Detected" || echo "Not detected")
+MIC="Not detected"
+if echo "$AUDIO_INFO" | grep -qi "microphone\|input"; then
+    MIC="Detected"
+fi
+
+SPEAKER="Not detected"
+if echo "$AUDIO_INFO" | grep -qi "speaker\|output"; then
+    SPEAKER="Detected"
+fi
 
 POWER_INFO=$(pmset -g batt 2>/dev/null)
 if echo "$POWER_INFO" | grep -q "InternalBattery"; then
@@ -99,8 +112,7 @@ fi
 # -------------------------------
 # REPORT GENERATION
 # -------------------------------
-REPORT=$(cat <<EOF
-
+REPORT="
 ==========================================
 SCHOOL COMPUTER SPECIFICATION REPORT
 ==========================================
@@ -172,8 +184,7 @@ Battery            : $BATTERY_STATUS
 ==========================================
 END OF AUTOMATIC REPORT
 ==========================================
-EOF
-)
+"
 
 # Output to terminal
 echo "$REPORT"
@@ -186,9 +197,9 @@ OUTPUT_FILE="$HOME/Desktop/Computer_Specification_Report.txt"
 echo "$REPORT" > "$OUTPUT_FILE"
 
 echo ""
-echo -e "\033[1;32m==========================================\033[0m"
-echo -e "\033[1;32m DONE!\033[0m"
-echo -e "\033[1;32m==========================================\033[0m"
+echo "\033[1;32m==========================================\033[0m"
+echo "\033[1;32m DONE!\033[0m"
+echo "\033[1;32m==========================================\033[0m"
 echo ""
 echo "The report has been AUTOMATICALLY COPIED TO YOUR CLIPBOARD."
 echo ""
