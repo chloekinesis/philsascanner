@@ -6,7 +6,6 @@ $ErrorActionPreference = "SilentlyContinue"
 
 # Where the plain-text backup copy of the report gets saved
 $Timestamp  = Get-Date -Format "yyyy-MM-dd_HHmmss"
-$OutputFile = Join-Path -Path ([Environment]::GetFolderPath("Desktop")) -ChildPath "SchoolPC_Report_$Timestamp.txt"
 
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -534,9 +533,6 @@ Write-Host $DisplayReport
 # Copy the flat, form-friendly version to clipboard
 $Report | Set-Clipboard
 
-# Save the pretty version to a text file as a readable backup copy
-$DisplayReport | Out-File -FilePath $OutputFile -Encoding UTF8
-
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor Green
 Write-Host " DONE!"
@@ -544,8 +540,6 @@ Write-Host "==========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "The report has been AUTOMATICALLY COPIED TO YOUR CLIPBOARD."
 Write-Host ""
-Write-Host "It has also been saved to:"
-Write-Host $OutputFile
 Write-Host ""
 Write-Host "Please paste the report into the jotform."
 Write-Host ""
